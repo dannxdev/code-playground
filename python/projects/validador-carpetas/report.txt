@@ -1,0 +1,7 @@
+REPORTE DE ERRORES:
+ Ruta: e:\code-workspace\python-code\python-learning\projects\validador-carpetas\src\mi-proyecto-ejemplo:
+
+⚠️ Directorio no encontrado: e:\code-workspace\python-code\python-learning\projects\validador-carpetas\src\mi-proyecto-ejemplo\config\daniel.db
+⚠️ Directorio no encontrado: e:\code-workspace\python-code\python-learning\projects\validador-carpetas\src\mi-proyecto-ejemplo\config\uala.jpeg
+⚠️ Directorio no encontrado: e:\code-workspace\python-code\python-learning\projects\validador-carpetas\src\mi-proyecto-ejemplo\data\key.html
+⚠️ Directorio no encontrado: e:\code-workspace\python-code\python-learning\projects\validador-carpetas\src\mi-proyecto-ejemplo\output\learn.xlxs
