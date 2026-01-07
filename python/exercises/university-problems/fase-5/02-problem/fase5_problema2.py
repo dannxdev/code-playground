@@ -30,17 +30,29 @@ class Library:
     def show_all_books(self):
         """Muestra todos los libros de la biblioteca."""
 
-        for category in self.categories:
-            print(f"\n{category.category_name}\n")
+        if len(self.categories) > 0:
 
-            if len(category.books) > 0:
-                for book in category.books:
-                    book.show_info()
+            total_reg_books = 0
 
-            else:
-                print('Vacio')
+            for category in self.categories:
+                print(f"\n{category.category_name}\n")
+
+                if len(category.books) > 0:
+                    for book in category.books:
+                        book.show_info()
+                        total_reg_books += 1
+
+                else:
+                    print('No hay ningun libro registrado en esta categoria')
+
+            print(f"\nTotal libros registrados: {total_reg_books}")
+
+        else:
+            print('No hay ninguna categoria registrada.')
 
     def show_all_categories(self):
+        """Muestra las categorias agregadas a la biblioteca."""
+
         print("Categorias:")
         for category in self.categories:
             print(
@@ -65,6 +77,30 @@ class Library:
                     all_books_id.append(book.book_id)
 
         return all_books_id
+
+    def inventory_value_not_discount(self):
+        """Muestra el valor total del inventario
+        sin aplicar descuentos."""
+
+        if len(self.categories) > 0:
+            inventory_total_value = 0
+
+            for category in self.categories:
+
+                if len(category.books) > 0:
+                    sub_inv_value = category.category_price * \
+                        len(category.books)
+
+                    inventory_total_value += sub_inv_value
+
+                else:
+                    print(
+                        f"No hay ningun libro registrado en la categoria '{category.category_name}'")
+
+            print(f"\nPrecio total del inventario: ${inventory_total_value}")
+
+        else:
+            print('No hay ninguna categoria registrada.')
 
 
 class Category:
@@ -117,6 +153,7 @@ mi_biblioteca.add_category(historia)
 
 
 def register_books(library: Library):
+    """Registra libros en la biblioteca."""
 
     print('REGISTRO DE LIBROS')
 
@@ -162,11 +199,9 @@ def register_books(library: Library):
         if reg_opcion == "n":
             break
 
+    library.inventory_value_not_discount()
+
     print(f"Se registraron {num_registers} libros.")
-
-    library.show_all_books()
-
-    print("Fin del registro.")
 
 
 register_books(mi_biblioteca)
