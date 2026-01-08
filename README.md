@@ -1,9 +1,8 @@
 # 🛝 Code Playground
-
-¡Bienvenido a mi playground personal de código! 🚀  
+  
 Este repositorio es mi espacio de aprendizaje y experimentación donde registro mi progreso en diferentes lenguajes de programación.
 
-Aquí pongo a prueba mis conocimientos resolviendo **desafíos**, **ejercicios** y creando **pequeños proyectos** prácticos. Nada demasiado complejo: solo aplicaciones y programas sencillos para reforzar conceptos y divertirme mientras aprendo. 😄
+Aquí pongo a prueba mis conocimientos resolviendo **desafíos**, **ejercicios** y creando **pequeños proyectos** prácticos. Nada demasiado complejo: solo aplicaciones y programas sencillos para reforzar conceptos mientras aprendo. 😄
 
 ## Lenguajes actuales 🐍🌐
 
