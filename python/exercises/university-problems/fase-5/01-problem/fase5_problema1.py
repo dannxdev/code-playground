@@ -44,10 +44,12 @@ class School:
         return id_found
 
     def show_students(self):
-
-        print("ESTUDIANTES MATRICULADOS:\n")
-        for student in self.students:
-            student.show_info()
+        if len(self.students) > 0:
+            print("ESTUDIANTES MATRICULADOS:\n")
+            for student in self.students:
+                student.show_info()
+        else:
+            print("Ningun estudiante registrado.")
 
 
 class Course:
@@ -102,32 +104,11 @@ class Payment:
         return float(0)
 
 
-unad_school = School()
-
-# Cursos:
-programacion = Course('C1', "Programación", 300000, 6, 20)
-diseno_grafico = Course('C2', "Diseño Gráfico", 250000, 4, 15)
-redes = Course('C3', "Redes", 200000, 5, 10)
-
-# Añadiendo los cursos:
-unad_school.add_courses(programacion)
-unad_school.add_courses(diseno_grafico)
-unad_school.add_courses(redes)
-
-
 def registration(school: School):
+    """Registra a los estudiantes en la escuela."""
 
     while True:
-        try:
-            reg_num = int(input('Numero de estudiantes a inscribir: '))
-            if reg_num > 0:
-                break
-            print('Debe ingresar un valor mayor a cero.')
-        except ValueError:
-            print("Ha ingresado un valor no valido")
-
-    for reg in range(1, reg_num + 1):
-        print(f'Registro {reg}:')
+        print('INGRESE LOS DATOS DEL ESTUDIANTE:\n')
 
         while True:
             reg_student_id = input('ID del Estudiante: ').upper()
@@ -152,7 +133,7 @@ def registration(school: School):
         while True:
             try:
                 reg_payment_method = int(
-                    input("Elija un método de pago (1-2): "))
+                    input("\nElija un método de pago (1-2): "))
                 if reg_payment_method in school.payment_methods:
                     break
                 print('Ha elegido una opción no valida')
@@ -162,14 +143,43 @@ def registration(school: School):
         new_student = Student(reg_student_id, reg_student_name,
                               reg_course_id, reg_payment_method)
 
+        print("\nDatos del estudiante a registrar:\n")
+        new_student.show_info()
+
         if school.add_student(new_student):
             print('El estudiante se ha registrado exitosamente')
-
         else:
             print("Ha ocurrido un error al realizar el registro.")
 
+        while True:
+            other_reg = input(
+                "\nDesea registrar otro estudiante? (s/n): ").lower()
+            if other_reg in ('s', 'n'):
+                break
+            print('Opcion no valida.')
 
-registration(unad_school)
+        if other_reg == 'n':
+            print("\n")
+            break
+
+        print("\n")
 
 
-unad_school.show_students()
+if __name__ == "__main__":
+
+    # Creando la escuela:
+    unad_school = School()
+
+    # Cursos:
+    programacion = Course('C1', "Programación", 300000, 6, 20)
+    diseno_grafico = Course('C2', "Diseño Gráfico", 250000, 4, 15)
+    redes = Course('C3', "Redes", 200000, 5, 10)
+
+    # Añadiendo los cursos:
+    unad_school.add_courses(programacion)
+    unad_school.add_courses(diseno_grafico)
+    unad_school.add_courses(redes)
+
+    registration(unad_school)
+
+    unad_school.show_students()
