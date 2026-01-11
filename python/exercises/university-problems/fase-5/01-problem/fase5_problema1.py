@@ -107,63 +107,6 @@ class Payment:
 def registration(school: School):
     """Registra a los estudiantes en la escuela."""
 
-    while True:
-        print('INGRESE LOS DATOS DEL ESTUDIANTE:\n')
-
-        while True:
-            reg_student_id = input('ID del Estudiante: ').upper()
-            if not school.validate_student_id(reg_student_id):
-                break
-            print('El ID ingresado ya esta registrado, ingrese uno diferente.')
-
-        reg_student_name = input('Nombre del Estudiante: ').capitalize()
-
-        school.show_courses()
-
-        while True:
-            reg_course_id = input(
-                'Código del curso al que se inscribe: ').upper()
-            if not school.search_course(reg_course_id) is None:
-                break
-            print(f"No se encontró el curso con el código '{reg_course_id}'")
-
-        reg_selected_course = school.search_course(reg_course_id)
-        reg_selected_course.show_payment_method()  # type: ignore
-
-        while True:
-            try:
-                reg_payment_method = int(
-                    input("\nElija un método de pago (1-2): "))
-                if reg_payment_method in school.payment_methods:
-                    break
-                print('Ha elegido una opción no valida')
-            except ValueError:
-                print('Ha elegido una opción no valida')
-
-        new_student = Student(reg_student_id, reg_student_name,
-                              reg_course_id, reg_payment_method)
-
-        print("\nDatos del estudiante a registrar:\n")
-        new_student.show_info()
-
-        if school.add_student(new_student):
-            print('El estudiante se ha registrado exitosamente')
-        else:
-            print("Ha ocurrido un error al realizar el registro.")
-
-        while True:
-            other_reg = input(
-                "\nDesea registrar otro estudiante? (s/n): ").lower()
-            if other_reg in ('s', 'n'):
-                break
-            print('Opcion no valida.')
-
-        if other_reg == 'n':
-            print("\n")
-            break
-
-        print("\n")
-
 
 if __name__ == "__main__":
 
