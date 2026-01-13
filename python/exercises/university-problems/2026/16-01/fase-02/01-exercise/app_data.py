@@ -1,16 +1,48 @@
-import tkinter as tk
-import os
-import datetime as dt
-
-
+# CLASE TALLER:
 class TallerBicicletas:
     """Clase Taller"""
 
-    def __init__(self, nombre_taller):
-        self._nombre_taller = nombre_taller
-        self._bicicletas = []
+    def __init__(self):
+        # Diccionario que almacenara las bicicletas respecto al serial.
+        self._bicicletas = {}
+
+    def agregar_bicicleta(self, bicicleta):
+        """Agrega una bicicleta al taller."""
+
+        if isinstance(bicicleta, Bicicleta):
+            if not bicicleta in self._bicicletas:
+                self._bicicletas[bicicleta.obtener_serial()] = bicicleta
+                print("Bicicleta añadida exitosamente.")
+                return True
+            print("La bicicleta ya existe en el taller.")
+
+    def buscar_bicicleta(self, serial):
+        """Busca una bicicleta en el taller."""
+
+        if len(self._bicicletas) > 0:
+            if serial in self._bicicletas:
+                return self._bicicletas[serial]
+
+        return None
+
+    def registrar_salida_taller(self, serial, hora):
+        """Registra la salida."""
+
+        if isinstance(hora, Hora):
+            bicicleta = self.buscar_bicicleta(serial)
+
+            if not bicicleta is None:
+                bicicleta.registrar_salida(hora)
+                self._bicicletas[serial] = bicicleta
+                return True
+        return False
+
+    def mostrar_bicicletas(self):
+        if len(self._bicicletas) > 0:
+            print(self._bicicletas)
 
 
+# CLASE BICICLETA:
 class Bicicleta:
     """Clase Taller de Bicicletas."""
 
@@ -22,7 +54,7 @@ class Bicicleta:
         self._hora_salida = None
 
     def mostrar_info(self):
-        """Muestra la informacion de la Bicicleta."""
+        """Muestra la information de la Bicicleta."""
 
         print(f"Serial: {self._serial}")
         print(f"Costo Hora: {self._costo_hora}")
@@ -50,10 +82,11 @@ class Bicicleta:
         return None
 
     def obtener_serial(self):
-        "Muestra el serial de la bicicleta en consola."
-        print(f"SN: {self._serial}")
+        "Obtiene el serial de la bicicleta."
+        return self._serial
 
 
+# CLASE HORA:
 class Hora:
     """Clase Hora"""
 
@@ -120,15 +153,15 @@ def calc_dif_horas(hora_ingreso, hora_salida):
     raise ValueError('Formato de hora no valido.')
 
 
-mi_taller = TallerBicicletas('BiciTaller')
+def conv_texto_hora(hora_texto):
+    """Valida si un texto es hora."""
 
-mi_bicicleta = Bicicleta('B7363HJV9837')
-
-mi_bicicleta.mostrar_info()
-
-mi_bicicleta.registrar_ingreso(Hora(12, 40))
-mi_bicicleta.registrar_salida(Hora(19, 57))
-
-mi_bicicleta.mostrar_info()
-
-print(mi_bicicleta.calcular_total())
+    if isinstance(hora_texto, str):
+        if ":" in hora_texto:
+            hora, minutos = hora_texto.split(":")
+            try:
+                f_hora = Hora(int(hora), int(minutos))
+                return f_hora
+            except Exception as e:
+                print(f"Error al convertir la hora: {e}")
+    return None
