@@ -10,11 +10,13 @@ class TallerBicicletas:
         """Agrega una bicicleta al taller."""
 
         if isinstance(bicicleta, Bicicleta):
-            if not bicicleta in self._bicicletas:
-                self._bicicletas[bicicleta.obtener_serial()] = bicicleta
+            sn = bicicleta.obtener_serial()
+            if not sn in self._bicicletas:
+                self._bicicletas[sn] = bicicleta
                 print("Bicicleta añadida exitosamente.")
                 return True
             print("La bicicleta ya existe en el taller.")
+        return False
 
     def buscar_bicicleta(self, serial):
         """Busca una bicicleta en el taller."""
@@ -38,17 +40,25 @@ class TallerBicicletas:
         return False
 
     def mostrar_bicicletas(self):
+        """Muestra todas las bicicletas registradas."""
         if len(self._bicicletas) > 0:
             print(self._bicicletas)
 
 
+# =======================================
+# CREANDO LA INSTANCIA DEL TALLER
+# =======================================
+taller_bicicletas = TallerBicicletas()
+
 # CLASE BICICLETA:
+
+
 class Bicicleta:
-    """Clase Taller de Bicicletas."""
+    """Clase Bicicleta"""
 
     def __init__(self, serial):
         # Inicializando la instancia de la clase:
-        self._serial = serial
+        self._serial = serial.upper()
         self._costo_hora = float(5000)
         self._hora_ingreso = None
         self._hora_salida = None
@@ -63,7 +73,10 @@ class Bicicleta:
 
     def registrar_ingreso(self, hora_ingreso):
         """Registra la hora de ingreso de una bicicleta."""
-        self._hora_ingreso = hora_ingreso
+        if isinstance(hora_ingreso, Hora):
+            self._hora_ingreso = hora_ingreso
+            return True
+        return False
 
     def registrar_salida(self, hora_salida):
         """Registra la hora de ingreso de la bicicleta."""
@@ -157,11 +170,54 @@ def conv_texto_hora(hora_texto):
     """Valida si un texto es hora."""
 
     if isinstance(hora_texto, str):
-        if ":" in hora_texto:
+        if ":" in hora_texto and len(hora_texto) == 5:
             hora, minutos = hora_texto.split(":")
             try:
                 f_hora = Hora(int(hora), int(minutos))
                 return f_hora
-            except Exception as e:
-                print(f"Error al convertir la hora: {e}")
+            except ValueError:
+                return None
     return None
+
+
+def validar_input(texto):
+    """
+    Valida que una entrada de usuario sea un texto valido.
+    """
+    # Verificar que el texto sea una cadena de texto válida:
+    if not isinstance(texto, str):
+        return False
+    # Verificar que no esté vacía
+    if len(texto) == 0:
+        return False
+    # Eliminar todos los tipos de espacios en blanco (espacios, tabs, saltos de línea, espacios Unicode)
+    texto_limpio = texto.strip()
+    # Verificar que después de eliminar espacios al inicio y final, aún tenga contenido
+    if len(texto_limpio) == 0:
+        return False
+    # Verificar que NO contenga ningún espacio en blanco en el texto
+    for char in texto_limpio:
+        if char.isspace():
+            return False
+    # Si pasó todas las validaciones, la entrada es válida
+    return True
+
+
+def reg_nueva_bicicleta(serial_input, hora_ingreso_input):
+    """
+    Recibe el serial y la hora de ingreso de la bicicleta
+    desde la interfaz.
+
+    :param serial: Serial Bicicleta
+    :param hora_ingreso: Hora ingreso formato texto 'hh:mm',
+    ej: '12:30'
+    """
+
+    if validar_input(serial_input) and validar_input(hora_ingreso_input):
+        nueva_hora = conv_texto_hora(hora_ingreso_input)
+        if not nueva_hora is None and len(serial_input) <= 15:
+            nueva_bicicleta = Bicicleta(serial_input)
+            if nueva_bicicleta.registrar_ingreso(nueva_hora):
+                if taller_bicicletas.agregar_bicicleta(nueva_bicicleta):
+                    return True
+    return False
