@@ -1,9 +1,6 @@
 import tkinter as tk
 import app_data
 
-# TALLER DE BICICLETAS:
-BIKE_WORKSHOP = app_data.TallerBicicletas()
-
 
 # Clase Usuario con atributos predefinidos:
 class User:
@@ -45,7 +42,7 @@ def capture_input(object_input: tk.Entry):
 
 # Creando la ventana de login:
 login_window = tk.Tk("loginWindow")
-login_window.title("Login")
+login_window.title("Bike WorkShop | Login")
 login_window.geometry("300x200")
 login_window_label = tk.Label(master=login_window, text="LOGIN", font='Arial')
 login_window_label.pack()
@@ -94,30 +91,27 @@ output_label.pack(pady=5)
 # Ejecutando la ventana de login:
 login_window.mainloop()
 
+
 # =============================
 # VENTANA DE REGISTRO BICICLETA
 # =============================
 
-
 def add_bike():
-    serial_user = capture_input(serial_input).upper()
-    if len(serial_user) == 10:
-        entry_time_user = capture_input(entry_time_input)
-        entry_time_user = app_data.conv_texto_hora(entry_time_user)
+    """
+    Valida los datos y añade la bicicleta.
+    """
+    serial_user = capture_input(serial_input)
+    entry_time_user = capture_input(entry_time_input)
 
-        # Creando la bicicleta:
-        new_bike = app_data.Bicicleta(serial_user)
-        new_bike.registrar_ingreso(entry_time_user)
-        new_bike.mostrar_info()
-        BIKE_WORKSHOP.agregar_bicicleta(new_bike)
-        BIKE_WORKSHOP.mostrar_bicicletas()
+    if app_data.reg_nueva_bicicleta(serial_user, entry_time_user):
+        reg_output_text.set('Registro Exitoso :D')
 
     else:
-        reg_output_text.set("Algo salio mal.")
+        reg_output_text.set('Algo salio mal :(')
 
 
 reg_bike_window = tk.Tk("regBicycleWindow")
-reg_bike_window.title("Register Bike")
+reg_bike_window.title("Bike WorkShop | Register Bike")
 reg_bike_window.geometry("300x200")
 reg_bike_window_label = tk.Label(
     master=reg_bike_window,
@@ -131,12 +125,12 @@ bike_data_frame = tk.Frame()
 # Serial:
 serial_input_label = tk.Label(
     master=bike_data_frame,
-    text="Serial:")
+    text="Serial (15):")
 serial_input = tk.Entry(master=bike_data_frame)
 # Hora ingreso:
 entry_time_input_label = tk.Label(
     master=bike_data_frame,
-    text="Entry Time:")
+    text="Entry Time (HH:MM):")
 entry_time_input = tk.Entry(master=bike_data_frame)
 
 bike_data_frame.pack()
@@ -164,3 +158,31 @@ reg_output_label.pack(pady=5)
 
 # Ejecutando la ventana de registro:
 reg_bike_window.mainloop()
+
+# =============================
+# VENTANA DE MENU
+# =============================
+
+menu_window = tk.Tk("menuWindow")
+menu_window.title("Bike WorkShop | Menu")
+menu_window.geometry("300x200")
+menu_window_label = tk.Label(
+    master=menu_window,
+    text="BIKE WORKSHOP | MENU",
+    font='Arial')
+menu_window_label.pack()
+
+# Boton de registrar bicicleta:
+reg_option_button = tk.Button(
+    master=menu_window,
+    text="Register Bike")
+reg_option_button.pack(pady=10)
+
+# Boton de registrar salida bicicleta:
+reg_option_button = tk.Button(
+    master=menu_window,
+    text="Register Bike Exit")
+reg_option_button.pack(pady=5)
+
+# Ejecutando la ventana de menu:
+menu_window.mainloop()
