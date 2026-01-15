@@ -1,21 +1,18 @@
 import tkinter as tk
 from tkinter import ttk
 
+import app_source as app_src
+
 
 class BikeWorkShopApp:
     """
     Clase que gestiona toda la aplicación.
     """
 
-    def __init__(self, root):
-        """
-        Constructor de la aplicación.
+    def __init__(self, root_window):
+        """Constructor de la aplicación."""
 
-        Args:
-            root: La ventana principal de Tkinter (Tk())
-        """
-
-        self.root = root
+        self.root = root_window
         # Configuración inicial de la ventana
         self.root.title("Bike WorkShop")
 
@@ -42,7 +39,6 @@ class BikeWorkShopApp:
         """
         # Obtener el ancho total de la pantalla del usuario
         ancho_pantalla = self.root.winfo_screenwidth()
-
         # Obtener el alto total de la pantalla del usuario
         alto_pantalla = self.root.winfo_screenheight()
 
@@ -80,7 +76,7 @@ class BikeWorkShopApp:
         menu_window_label.pack()
 
         # Boton de registrar bicicleta:
-        reg_option_button = tk.Button(
+        reg_option_button = ttk.Button(
             master=self.root,
             text="Register Bike",
             command=self.mostrar_pantalla_registro)
@@ -88,15 +84,17 @@ class BikeWorkShopApp:
         reg_option_button.pack(pady=10)
 
         # Boton de registrar salida bicicleta:
-        reg_option_button = tk.Button(
+        reg_option_button = ttk.Button(
             master=self.root,
-            text="Register Bike Exit")
+            text="Register Bike Exit",
+            command=self.mostrar_pantalla_registrar_salida)
 
         reg_option_button.pack(pady=5)
 
     def mostrar_pantalla_registro(self):
         """Muestra la pantalla de registro de bicicletas."""
 
+        # Limpiando la ventana:
         self.limpiar_ventana()
         self.root.title("Bike WorkShop | Register")
 
@@ -110,50 +108,146 @@ class BikeWorkShopApp:
         # INPUTS PARA DATOS DE LA BICICLETA:
 
         bike_data_frame = tk.Frame()
+        bike_data_frame.pack()
         # Serial:
         serial_input_label = tk.Label(
             master=bike_data_frame,
             text="Serial (15):")
-        serial_input = tk.Entry(master=bike_data_frame)
+        serial_input_label.pack()
+        self.serial_input = ttk.Entry(master=bike_data_frame)
+        self.serial_input.pack()
         # Hora ingreso:
         entry_time_input_label = tk.Label(
             master=bike_data_frame,
             text="Entry Time (HH:MM):")
-        entry_time_input = tk.Entry(master=bike_data_frame)
-
-        bike_data_frame.pack()
-        serial_input_label.pack()
-        serial_input.pack()
         entry_time_input_label.pack()
-        entry_time_input.pack()
+        self.entry_time_input = ttk.Entry(master=bike_data_frame)
+        self.entry_time_input.pack()
 
-        # Boton de confirmar registro
-        reg_bike_button = tk.Button(
+        # Botón de confirmar registro
+        reg_bike_button = ttk.Button(
             master=self.root,
             text="Register",
-            command=self.add_bike)
+            command=self.reg_bike_action)
         reg_bike_button.pack(pady=10)
 
+        # --- Botón Volver ---
+        reg_back_button = ttk.Button(
+            master=self.root,
+            text="Back to menu",
+            command=self.mostrar_pantalla_menu)
+        reg_back_button.pack(pady=10)
+
         # Mensajes de salida:
-        reg_output_text = tk.StringVar()
+        self.reg_output_text = tk.StringVar()
         reg_output_label = tk.Label(
             master=self.root,
             text="Output",
-            textvariable=reg_output_text,
+            textvariable=self.reg_output_text,
             fg='blue2')
 
         reg_output_label.pack(pady=5)
 
-    def add_bike(self):
-        print("Holaaaaa")
+    # --- FUNCION MOSTRAR VENTANA DE REGISTRAR SALIDA ---
+    def mostrar_pantalla_registrar_salida(self):
+        """Muestra la pantalla de registrar salida de una bicicleta."""
 
+        # Limpiando la ventana:
+        self.limpiar_ventana()
+        self.root.title("Bike WorkShop | Register Exit")
+
+        reg_bike_exit_window_label = tk.Label(
+            master=self.root,
+            text="REGISTER EXIT BIKE",
+            font='Arial')
+
+        reg_bike_exit_window_label.pack()
+
+        datos_bicicleta_frame = tk.Frame(self.root)
+        datos_bicicleta_frame.pack()
+        # Etiqueta de serial:
+        serial_label = tk.Label(
+            master=datos_bicicleta_frame,
+            text="Serial (15):"
+        )
+        serial_label.pack()
+        # Serial input
+        self.input_reg_ext_serial = ttk.Entry(master=datos_bicicleta_frame)
+        self.input_reg_ext_serial.pack()
+
+        # Etiqueta de Hora salida:
+        ext_time_label = tk.Label(
+            master=datos_bicicleta_frame,
+            text="Exit Time (HH:MM):"
+        )
+        ext_time_label.pack()
+        # Hora salida input
+        self.input_reg_ext_time = ttk.Entry(master=datos_bicicleta_frame)
+        self.input_reg_ext_time.pack()
+
+        # Botón de buscar serial
+        reg_bike_ext_button = ttk.Button(
+            master=self.root,
+            text="Search bike",
+            command=self.search_bike_action)
+        reg_bike_ext_button.pack(pady=10)
+
+        # Boton de volver al menu.
+        # --- Botón Volver ---
+        reg_back_button = ttk.Button(
+            master=self.root,
+            text="Back to menu",
+            command=self.mostrar_pantalla_menu)
+        reg_back_button.pack(pady=10)
+
+        # Mensajes de salida:
+        self.reg_ext_output_text = tk.StringVar()
+        reg_ext_output_label = tk.Label(
+            master=self.root,
+            text="Output",
+            textvariable=self.reg_ext_output_text,
+            fg='blue2')
+
+        reg_ext_output_label.pack(pady=5)
+
+    # --- FUNCIONES DE LA INTERFAZ ---
+
+    def search_bike_action(self):
+        """Accion del boton de buscar serial."""
+
+        get_serial_ext = self.capturar_input(self.input_reg_ext_serial).upper()
+        get_time_ext = self.capturar_input(self.input_reg_ext_time)
+        if app_src.reg_salida_bicicleta(get_serial_ext, get_time_ext):
+            self.reg_ext_output_text.set("Changes Applied :D")
+
+            app_src.TALLER_BICICLETAS.mostrar_bicicletas()
+
+        else:
+            self.reg_ext_output_text.set("Something Wrong :(")
+
+    def capturar_input(self, object_input: tk.Entry):
+        """Captura la entrada de un objeto Input."""
+        return object_input.get()
+
+    def reg_bike_action(self):
+        """
+        Acción que se realiza al presionar el boton
+        de registro
+        """
+
+        serial_user = self.capturar_input(self.serial_input)
+        entry_time_user = self.capturar_input(self.entry_time_input)
+
+        if app_src.reg_nueva_bicicleta(serial_user, entry_time_user):
+            self.reg_output_text.set('Registro Exitoso :D')
+
+        else:
+            self.reg_output_text.set('Algo salio mal :(')
 
     # --- PUNTO DE ENTRADA DE LA APLICACIÓN ---
 if __name__ == "__main__":
-    """
-    Este bloque solo se ejecuta cuando corremos este archivo directamente.
-    No se ejecuta si importamos este archivo desde otro módulo.
-    """
+    # Este bloque solo se ejecuta cuando corremos este archivo directamente.
+    # No se ejecuta si importamos este archivo desde otro módulo.
 
     # Tk() crea la ventana principal de la aplicación
     root = tk.Tk()
