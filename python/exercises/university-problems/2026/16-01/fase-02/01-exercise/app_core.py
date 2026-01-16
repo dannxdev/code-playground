@@ -1,11 +1,26 @@
 import os
 os.system('cls')
 
+
+# ===========================================================================
+# CLASE USUARIO
+# ===========================================================================
+
+class User:
+    """Clase Usuario"""
+
+    def __init__(self):
+        self._username = 'programacion'
+        self._password = 'programacion'
+
+    def validate_user(self, username, password):
+        """Valida si las credenciales ingresadas son correctas."""
+        return self._username == username and self._password == password
+
+
 # ===========================================================================
 # CLASE TALLER DE BICICLETAS
 # ===========================================================================
-
-
 class BikeWorkShop:
     """
     Clase Taller de Bicicletas.
@@ -32,7 +47,7 @@ class BikeWorkShop:
         """
         if isinstance(bike, Bike):
             sn_bike = bike.get_serial()
-            if not sn_bike in self._registered_bikes:
+            if not self.serial_in_workshop(sn_bike):
                 # Si el serial de la bicicleta no esta en el Taller:
                 if not self._hour_price is None:
                     # Si el precio por hora no esta definido.
@@ -53,6 +68,29 @@ class BikeWorkShop:
                 hour_price = float(hour_price)
             self._hour_price = hour_price
             return True
+        return False
+
+    def serial_in_workshop(self, serial):
+        """Valida si un serial existe en el Taller"""
+        return serial in self._registered_bikes
+
+    def validate_bike_input(self, serial, entry_time):
+        """Hace el proceso de registro solo si los datos
+        son correctos."""
+
+        # Validando que las entradas no contengan espacios.
+        if validate_input(serial) and validate_input(entry_time):
+            if len(serial) >= 8:
+                serial = serial.upper()
+
+                if not self.serial_in_workshop(serial):
+                    entry_time = text_to_hour(entry_time)
+
+                    if not entry_time is None:
+                        new_bike = Bike(serial)
+                        if new_bike.reg_entry_time(entry_time):
+                            return self.register_bike(new_bike)
+
         return False
 
 
