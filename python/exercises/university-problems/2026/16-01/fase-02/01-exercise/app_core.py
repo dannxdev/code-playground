@@ -10,8 +10,8 @@ class User:
     """Clase Usuario"""
 
     def __init__(self):
-        self._username = 'programacion'
-        self._password = 'programacion'
+        self._username = ''
+        self._password = ''
 
     def validate_user(self, username, password):
         """Valida si las credenciales ingresadas son correctas."""
@@ -75,8 +75,10 @@ class BikeWorkShop:
         return serial in self._registered_bikes
 
     def validate_bike_input(self, serial, entry_time):
-        """Hace el proceso de registro solo si los datos
-        son correctos."""
+        """
+        Hace el proceso de registro solo si los datos
+        son correctos.
+        """
 
         # Validando que las entradas no contengan espacios.
         if validate_input(serial) and validate_input(entry_time):
@@ -90,6 +92,30 @@ class BikeWorkShop:
                         new_bike = Bike(serial)
                         if new_bike.reg_entry_time(entry_time):
                             return self.register_bike(new_bike)
+
+        return False
+
+    def validate_reg_bike_exit(self, serial, exit_time):
+        """
+        Hace el proceso de registro solo si los datos
+        son correctos.
+        """
+
+        # Validando que las entradas no contengan espacios.
+        if validate_input(serial) and validate_input(exit_time):
+            if len(serial) >= 8:
+                serial = serial.upper()
+                if self.serial_in_workshop(serial):
+                    found_bike = self._registered_bikes[serial]
+                    exit_time = text_to_hour(exit_time)
+
+                    if not exit_time is None:
+                        if found_bike.reg_exit_time(exit_time):
+                            self._registered_bikes[serial] = found_bike
+                            total_price = found_bike.calc_total_price()
+
+                            if not total_price is None:
+                                return total_price
 
         return False
 
@@ -109,6 +135,18 @@ class Bike:
     def __repr__(self) -> str:
         # Representacion del objeto Bicicleta
         return f"Bicicleta(SN={self._serial_number}, precio_hora={self._hour_price}, hora_entrada={self._entry_time}, hora_salida={self._exit_time})"
+
+    def bike_info(self):
+        """Retorna la informacion de la Bicicleta."""
+
+        return f"""
+    Informacion de la bicicleta:
+    
+    - SN: {self._serial_number}
+    - Precio por hora: {self._hour_price}
+    - Hora de ingreso: {self._entry_time}
+    - Hora de salida: {self._exit_time}
+    """
 
     def reg_hour_price(self, hour_price):
         """
