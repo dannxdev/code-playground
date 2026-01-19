@@ -182,6 +182,7 @@ class BikeWorkShopApp:
         btn_reg_bike_out = ttk.Button(
             options_buttons_frame,
             text="Register Bike Exit",
+            command=self.show_bike_exit_window,
             width=30)
 
         btn_reg_bike_out.pack(pady=10)
@@ -263,14 +264,14 @@ class BikeWorkShopApp:
         frame_buttons.pack(pady=20)
 
         # Botón para volver atrás
-        btn_volver = ttk.Button(
+        btn_back = ttk.Button(
             frame_buttons,
             text="Go back",
             command=self.show_menu_window,  # Regresa a la pantalla anterior
             width=15
         )
         # pack con side="left" coloca los widgets horizontalmente
-        btn_volver.pack(side="left", padx=5)
+        btn_back.pack(side="left", padx=5)
 
         # Botón para Registrar la bicicleta.
         btn_register = ttk.Button(
@@ -280,6 +281,100 @@ class BikeWorkShopApp:
             width=15
         )
         btn_register.pack(side="left", padx=5)
+
+    def show_bike_exit_window(self):
+        """Muestrala ventana de registro de salida."""
+        # Limpiamos la ventana:
+        self.clean_window()
+        # Definiendo el nuevo tiulo de la venana:
+        self.root.title("Bike WorkShop | Exit Time Register")
+
+        # --- TITULO ---
+        title = tk.Label(
+            master=self.root,
+            text="BIKE EXIT TIME REGISTER",
+            font=('Arial', 17, "bold"),
+            bg="#f0f0f0",
+            fg="#333333"
+        )
+        title.pack(pady=40)
+
+        # --- DATOS DE LA BICICLETA ---
+        bike_frame = tk.Frame(master=self.root)
+        bike_frame.pack(pady=10)
+
+        # --- ENTRADA DE SERIAL ---
+        serial_label = tk.Label(
+            master=bike_frame,
+            text="Serial:",
+            font=('Arial', 10, "bold"),
+            bg="#f0f0f0"
+        )
+
+        serial_label.grid(row=0, column=1, sticky="w", padx=5, pady=10)
+
+        self.ext_serial_entry = ttk.Entry(master=bike_frame, width=20)
+        self.ext_serial_entry.grid(row=0, column=2, padx=5, pady=10)
+
+        # --- ENTRADA DE HORA DE SALIDA ---
+        exit_time_label = tk.Label(
+            master=bike_frame,
+            text="Exit Time (e. 09:30):",
+            font=('Arial', 10, "bold"),
+            bg="#f0f0f0"
+        )
+
+        exit_time_label.grid(row=1, column=1, sticky="w", padx=5, pady=10)
+
+        self.time_exit_input = ttk.Entry(
+            master=bike_frame,
+            width=20)
+
+        self.time_exit_input.grid(row=1, column=2, padx=5, pady=10)
+
+        # --- FRAME PARA INFO BICICLETA ---
+        info_bike_frame = tk.Frame(master=self.root, bg="#777777")
+        self.info_bike_text = tk.Label(
+            master=info_bike_frame,
+            text="",
+            font=("Arial", 9)
+        )
+
+        self.info_bike_text.pack()
+
+        # --- LABEL PARA MENSAJES DE ERROR ---
+        # Lo creamos vacío, lo usaremos para mostrar errores de validación
+        self.label_ext_reg_error = tk.Label(
+            self.root,
+            text="",  # Inicialmente vacío
+            font=("Arial", 9),
+            bg="#f0f0f0",
+            fg="red"
+        )
+        self.label_ext_reg_error.pack()
+
+        # --- FRAME PARA BOTONES ---
+        frame_buttons = tk.Frame(self.root, bg="#f0f0f0")
+        frame_buttons.pack(pady=20)
+
+        # Botón para volver atrás
+        btn_back = ttk.Button(
+            frame_buttons,
+            text="Go back",
+            command=self.show_menu_window,  # Regresa a la pantalla anterior
+            width=15
+        )
+        # pack con side="left" coloca los widgets horizontalmente
+        btn_back.pack(side="left", padx=5)
+
+        # Botón para Registrar la salida de la bicicleta.
+        btn_register_exit = ttk.Button(
+            frame_buttons,
+            text="Register Exit",
+            command=self.validate_reg_exit_time,
+            width=15
+        )
+        btn_register_exit.pack(side="left", padx=5)
 
     def validate_login_user(self):
         """Valida los datos del Inicio de sesion."""
@@ -304,6 +399,19 @@ class BikeWorkShopApp:
             return
         self.label_reg_error.config(text="Something went wrong :(")
         return
+
+    def validate_reg_exit_time(self):
+        """Valida el registro de la salida de una bicicleta."""
+        serial = self.ext_serial_entry.get()
+        exit_time = self.time_exit_input.get()
+
+        if self.bike_workshop.validate_reg_bike_exit(serial, exit_time):
+            total_price = self.bike_workshop.validate_reg_bike_exit(
+                serial, exit_time)
+
+            self.label_ext_reg_error.config(text=f"Total Pay ${total_price}")
+            return
+        self.label_ext_reg_error.config(text="Algo salio mal :(")
 
     def clean_window(self):
         """
