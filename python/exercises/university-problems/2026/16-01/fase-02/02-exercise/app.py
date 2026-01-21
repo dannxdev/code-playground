@@ -2,18 +2,48 @@ import os
 
 os.system('cls')
 
+
+# ===============================================
+# Clase Biblioteca
+# ===============================================
+class LibraryAdmin:
+    """Clase Biblioteca"""
+
+    def __init__(self):
+        self._reservations = []
+
+    def add_reservation(self, room_rsv):
+        """Agrega una reservacion a la Biblioteca."""
+
+        if self.validate_reserv(room_rsv):
+            self._reservations.append(room_rsv)
+            return True
+        return False
+
+    def validate_reserv(self, room_rsv):
+        """Valida si un objeto es de la Clase RoomReservation"""
+
+        return isinstance(room_rsv, RoomReservation)
+
+    def show_reservations(self):
+        """Muestra las reservaciones."""
+        return self._reservations
+
+
 # ===============================================
 # Clase Reservar Sala
 # ===============================================
-
-
 class RoomReservation:
+    """Clase Reservacion Sala."""
 
     def __init__(self):
         self._user = None
         self._start_time = None
         self._end_time = None
         self._hourly_rate = 12000
+
+    def __repr__(self) -> str:
+        return f"RoomReservation(user={self._user}, start_time={self._start_time}, end_time={self._end_time})"
 
     def reg_init_time(self, start_time):
         """Registra la ora de inicio."""
@@ -137,6 +167,8 @@ class Time:
         return None
 
 
+my_library = LibraryAdmin()
+
 my_rsv = RoomReservation()
 init_time = Time(12, 30)
 end_time = Time(21, 0)
@@ -144,4 +176,5 @@ end_time = Time(21, 0)
 my_rsv.reg_init_time(init_time)
 my_rsv.reg_end_time(end_time)
 
-print(my_rsv.calc_payment())
+my_library.add_reservation(my_rsv)
+my_library.show_reservations()
