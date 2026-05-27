@@ -1,29 +1,19 @@
-# Problema 10: La universidad UNAD desea llevar un registro de 100
-# estudiantes deportistas vinculados a las selecciones de la universidad.
-# Existen 3 selecciones(Código-Nombre) 1015-Futbol, 1030-
-# Basketball, 1045-Ciclismo.
-# De cada estudiante se conoce la: cédula, sexo(1. Mujer, 2.
-# Hombre), Edad, código de la selección a la que pertenece.
-# Realice las siguientes funciones:
-# Llenado de la matriz
-# Mostrar la matriz
-# Determine el porcentaje de hombres y mujeres de toda la matriz.
-# Determine el número de deportistas por cada selección.
-# NOTA:
-# • Para los ejercicios en los cuales no se coloca de forma explícita
-# que función debe ser implementada el estudiante tendrá
-# libertad de codificar al menos una función(el estudiante debe
-# revisar si la función retorna o no valores como también si se
-# debe enviar parámetros o no).
-# • Si el estudiante desea o cree que se debe utilizar más de una
-# función lo puede hacer.
-# • Se deben realizar las validaciones pertinentes para asegurar el
-# correcto funcionamiento de los programas teniendo en cuenta
-# aspectos como: que el usuario no pueda ingresar una letra
-# donde se esperan números, validar que el usuario solo pueda
-# ingresar valores positivos donde sea necesario, que el usuario
-# solo pueda ingresar números que se encuentren en
-# determinado rango, etc.
+"""
+PROBLEMA 10: Matriz de Deportistas
+
+La universidad UNAD desea llevar un registro de 100 estudiantes deportistas vinculados a las selecciones de la universidad.
+Existen 3 selecciones(Código-Nombre): 
+- 1015-Futbol
+- 1030-Basketball
+- 1045-Ciclismo.
+De cada estudiante se conoce la: cédula, sexo(1. Mujer, 2.Hombre), Edad, código de la selección a la que pertenece.
+Realice las siguientes funciones:
+
+- Llenado de la matriz
+- Mostrar la matriz
+- Determine el porcentaje de hombres y mujeres de toda la matriz.
+- Determine el número de deportistas por cada selección.
+"""
 
 import os
 import re
