@@ -1,7 +1,7 @@
 function iniciarSesionButton() {
 
-    let dbUser = "danielb21"
-    let dbPassword = "daniel752194"
+    let dbUser = "dannxdev"
+    let dbPassword = "752194"
 
     let username = document.getElementById("username").value
     let userPassword = document.getElementById("password").value
